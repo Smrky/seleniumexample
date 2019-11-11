@@ -163,7 +163,7 @@ public class AppTest {
         }
     }
 
-
+    @Test
     public void given_userIsLoggedIn_when_userAddsNewDeposit_then_depositRecordIsShownInDepositTableGrid() throws InterruptedException {
         // GIVEN user is logged in
 
