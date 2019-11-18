@@ -27,10 +27,10 @@ public class AppTest {
 
     @Before
     public void init() {
-//        System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
+       System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
 //        ChromeDriverService service = new ChromeDriverService()
         ChromeOptions cho = new ChromeOptions();
-        cho.addArguments("--headless");
+        //cho.addArguments("--headless");
         driver = new ChromeDriver(cho);
 //        driver.manage().window().maximize();
     }
@@ -252,5 +252,21 @@ public class AppTest {
         // here in code, we are 100% sure, that button is visible
     }
 
+
+    @Test
+    public void alzaSearchUbiquitiUnifi(){
+        driver.get("https://www.alza.cz/");
+        WebElement searchBar = driver.findElement(By.id("edtSearch"));
+        searchBar.sendKeys("ubiquiti unifi");
+
+        WebDriverWait wait = new WebDriverWait(driver, 12);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".t3")));
+
+        List<WebElement> searchResults = driver.findElements(By.cssSelector(".t3.ui-menu-item"));
+
+
+
+        Assert.assertEquals(3, searchResults.size());
+    }
 
 }
