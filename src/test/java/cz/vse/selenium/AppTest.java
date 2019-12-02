@@ -1,5 +1,7 @@
 package cz.vse.selenium;
 
+import churchcrm.testframework.DashboardPage;
+import churchcrm.testframework.LoginPage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,6 +35,20 @@ public class AppTest {
         //cho.addArguments("--headless");
         driver = new ChromeDriver(cho);
 //        driver.manage().window().maximize();
+    }
+
+    public void testPO_shouldLogin() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.open();
+        DashboardPage dashboardPage = loginPage.login("church", "church12345");
+        dashboardPage.shouldBeOpen();
+    }
+
+    public void testPO_shouldNotLogin() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.open();
+        DashboardPage dashboardPage = loginPage.login("church", "INVALID");
+        loginPage.shouldBeErrorMessage();
     }
 
     @After
