@@ -9,7 +9,7 @@ public class LoginTest extends TestConfig {
 
     @Test
     public void shouldLoginValidCredentials() {
-        login();
+        loginTest();
     }
 
     @Test
