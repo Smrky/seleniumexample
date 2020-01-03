@@ -9,7 +9,9 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -28,7 +30,6 @@ public class ProjectTest extends TestConfig {
         WebElement addProjectButton = driver.findElement(By.cssSelector(".btn-primary"));
         addProjectButton.click();
 
-        WebDriverWait wait = new WebDriverWait(driver, 1);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".modal-body")));
 
         WebElement projectNameInput = driver.findElement(By.cssSelector("#fields_158"));
@@ -47,13 +48,29 @@ public class ProjectTest extends TestConfig {
         //Given
         loginTest();
 
-        driver.get(URL+"index.php?module=items/items&path=21");
+        // delete all projects with prefix if such exist
+        searchProject("smro00");
+
+        // if search is empty - table has only one cell with "No Records Found"
+        List<WebElement> tableCells = driver.findElements(By.cssSelector(".table tbody tr td"));
+        if(tableCells.size() > 1) {
+            List<WebElement> tableProjectNames = driver.findElements(By.cssSelector(".table tbody tr .field-158-td"));
+            List<String> projectNames = new ArrayList<>();
+
+            for (WebElement tableProjectName : tableProjectNames) {
+                projectNames.add(tableProjectName.getText());
+            }
+
+            for (String projectName : projectNames) {
+                deleteProject(projectName);
+            }
+        }
 
         //When
         WebElement addProjectButton = driver.findElement(By.cssSelector(".btn-primary"));
         addProjectButton.click();
 
-        WebDriverWait wait = new WebDriverWait(driver, 1);
+
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".modal-body")));
 
         WebElement projectPrioritySelectElement = driver.findElement(By.cssSelector("#fields_156"));
@@ -65,29 +82,42 @@ public class ProjectTest extends TestConfig {
         projectStatusSelect.selectByValue("37");
 
         String uuid = UUID.randomUUID().toString();
+        String projectName = "smro00-"+uuid;
         WebElement projectNameInput = driver.findElement(By.cssSelector("#fields_158"));
-        projectNameInput.sendKeys("smro00 - "+uuid);
+        projectNameInput.sendKeys(projectName);
 
         WebElement projectDateInput = driver.findElement(By.cssSelector("#fields_159"));
         Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        projectDateInput.sendKeys(sdf.format(date));
+        SimpleDateFormat dashFormat = new SimpleDateFormat("yyyy-MM-dd");
+        projectDateInput.sendKeys(dashFormat.format(date));
 
         WebElement submitProjectButton = driver.findElement(By.cssSelector(".btn-primary-modal-action"));
         submitProjectButton.click();
 
         //Then
         Assert.assertEquals("Rukovoditel | Tasks", driver.getTitle());
-        driver.findElement(By.cssSelector(".page-breadcrumb li"));
+        WebElement breadcrumbItem = driver.findElement(By.cssSelector(".page-breadcrumb li:nth-child(2)"));
+        Assert.assertEquals(projectName, breadcrumbItem.getText());
 
+        searchProject(projectName);
 
-        WebElement projectsLink = driver.findElement(By.cssSelector(".fa-reorder"));
-        projectsLink.click();
+        WebElement projectPriorityDiv = driver.findElement(By.cssSelector(".field-156-td"));
+        WebElement projectStatusDiv = driver.findElement(By.cssSelector(".field-157-td"));
+        WebElement projectNameLink = driver.findElement(By.cssSelector(".field-158-td"));
+        WebElement projectStartDate = driver.findElement(By.cssSelector(".field-159-td"));
+        SimpleDateFormat slashFormat = new SimpleDateFormat("MM/dd/yyyy");
+        String checkDateFormat = slashFormat.format(date);
 
-        WebElement projectSearchInput = driver.findElement(By.cssSelector("#entity_items_listing66_21_search_keywords"));
-        projectSearchInput.clear();
-        projectSearchInput.sendKeys(uuid);
+        Assert.assertEquals("High", projectPriorityDiv.getText());
+        Assert.assertEquals("New", projectStatusDiv.getText());
+        Assert.assertEquals(projectName, projectNameLink.getText());
+        Assert.assertEquals(checkDateFormat, projectStartDate.getText());
 
+        deleteProject(projectName);
 
+        searchProject(projectName);
+
+        tableCells = driver.findElements(By.cssSelector(".table tbody tr td"));
+        Assert.assertEquals(1, tableCells.size());
     }
 }
