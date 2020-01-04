@@ -14,7 +14,9 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class TestConfig {
     public ChromeDriver driver;
@@ -207,5 +209,21 @@ public class TestConfig {
         driver.switchTo().defaultContent();
         WebElement createTaskButton = driver.findElement(By.cssSelector(".btn-primary-modal-action"));
         createTaskButton.click();
+    }
+
+    public void checkFilterResults(String[] expectedStatusesArray, int expectedFilterResultsCount) {
+        if(expectedStatusesArray.length < 7) {
+            WebElement usedFilter = driver.findElement(By.cssSelector(".filters-preview-condition-include"));
+            String[] usedFiltersArray = usedFilter.getText().split(", ");
+            Assert.assertArrayEquals(expectedStatusesArray, usedFiltersArray);
+        }
+
+        List<WebElement> taskStatuses = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".field-169-td")));
+
+        Assert.assertEquals(expectedFilterResultsCount, taskStatuses.size());
+
+        for (WebElement taskStatus : taskStatuses) {
+            Assert.assertTrue(taskStatus + "is of: " + Arrays.toString(expectedStatusesArray), Arrays.asList(expectedStatusesArray).contains(taskStatus.getText()));
+        }
     }
 }
