@@ -124,7 +124,7 @@ public class TaskTest extends TestConfig {
         WebElement submitDeleteTaskButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".btn-primary-modal-action")));
         submitDeleteTaskButton.click();
 
-        //deleteProject(projectName);
+        deleteProject(projectName);
     }
 
 }
