@@ -24,7 +24,7 @@ public class TestConfig {
     final String URL = "https://digitalnizena.cz/rukovoditel/";
     final String namePrefix="smro00";
 
-    boolean runOnTravis = false;
+    boolean runOnTravis = true;
     boolean windows = false;
 
     @Before
