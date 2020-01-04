@@ -45,12 +45,19 @@ public class ProjectTest extends TestConfig {
 
         // if search is empty - table has only one cell with "No Records Found"
         List<WebElement> tableCells = driver.findElements(By.cssSelector(".table tbody tr td"));
-        if(tableCells.size() == 2) {
-                deleteProject(namePrefix);
+
+        if(tableCells.size() > 1) {
+            List<WebElement> tableRows = driver.findElements(By.cssSelector(".table tbody tr"));
+
+            if(tableRows.size() == 1) {
+                WebElement projectNameLink = driver.findElement(By.cssSelector(".field-158-td"));
+                deleteProject(projectNameLink.getText());
+            }
+            if(tableRows.size() > 1) {
+                deleteAllProjects(namePrefix);
+            }
         }
-        if(tableCells.size() > 2){
-            deleteAllProjects(namePrefix);
-        }
+
 
         //When
         String uuid = UUID.randomUUID().toString();
