@@ -7,6 +7,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class TaskTest extends TestConfig {
@@ -80,7 +84,45 @@ public class TaskTest extends TestConfig {
         createTaskInProject(projectName, taskPrefix+"Status-Paid", "51");
         createTaskInProject(projectName, taskPrefix+"Status-Canceled", "52");
 
-        //TODO Verify that using default filter (New, Open, Waiting) only 3 tasks will be shown. Change applied filter in Filter info dialog to only contain (New, Waiting) ...there are more ways how to do it (you can click small x on Open "label" to delete it, or you can deal with writing into "suggestion box"). Verify only New and Waiting tasks are displayed. Now remove all filters and verify all created tasks are displayed. Delete all tasks using Select all and batch delete.
+        //Then
+        WebElement filtersDropdown = driver.findElement(By.cssSelector(".portlet-filters-preview .fa-angle-down"));
+        filtersDropdown.click();
+
+        WebElement defaultFilterLink = driver.findElement(By.cssSelector(".portlet-title .caption .btn-group:nth-child(1) ul li:nth-child(1) a"));
+        defaultFilterLink.click();
+
+        String[] expectedStatusesArray = {"New", "Open", "Waiting"};
+
+        checkFilterResults(expectedStatusesArray, 3);
+
+        WebElement filtersEditSpan = driver.findElement(By.cssSelector(".filters-preview-box-heading"));
+        filtersEditSpan.click();
+
+        WebElement deleteOpenFilterLink = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#reports_filters .search-choice a[data-option-array-index=\"1\"]")));
+        deleteOpenFilterLink.click();
+        WebElement submitFilterChangeButton = driver.findElement(By.cssSelector("#reports_filters .btn-primary-modal-action"));
+        submitFilterChangeButton.click();
+
+        expectedStatusesArray = new String[] {"New", "Waiting"};
+        checkFilterResults(expectedStatusesArray, 2);
+
+        WebElement deleteFiltersIcon = driver.findElement(By.cssSelector(".portlet-body .fa-trash-o"));
+        deleteFiltersIcon.click();
+
+        expectedStatusesArray = new String[] {"New", "Open", "Waiting", "Done", "Closed", "Paid", "Canceled"};
+        checkFilterResults(expectedStatusesArray, 7);
+
+        WebElement selectAllItemsInput = driver.findElement(By.cssSelector("#select_all_items"));
+        selectAllItemsInput.click();
+
+        WebElement taskMoreActionsToggle = driver.findElement(By.cssSelector(".entitly-listing-buttons-left .dropdown-toggle"));
+        taskMoreActionsToggle.click();
+
+        WebElement deleteProjectIcon = driver.findElement(By.cssSelector(".entitly-listing-buttons-left .fa-trash-o"));
+        deleteProjectIcon.click();
+
+        WebElement submitDeleteTaskButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".btn-primary-modal-action")));
+        submitDeleteTaskButton.click();
 
         //deleteProject(projectName);
     }
