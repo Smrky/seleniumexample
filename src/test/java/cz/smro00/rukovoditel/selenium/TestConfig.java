@@ -25,7 +25,7 @@ public class TestConfig {
     final String namePrefix="smro00";
 
     boolean runOnTravis = true;
-    boolean windows = false;
+    boolean windows = true;
 
     @Before
     public void init() {
