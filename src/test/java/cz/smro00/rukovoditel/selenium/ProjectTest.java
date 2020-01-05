@@ -4,12 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +16,7 @@ public class ProjectTest extends TestConfig {
     @Test
     public void shouldNotCreateProjectEmptyName() {
         //Given
-        loginTest();
+        validLogin();
 
         WebElement projectsLink = driver.findElement(By.cssSelector(".fa-reorder"));
         projectsLink.click();
@@ -38,7 +34,7 @@ public class ProjectTest extends TestConfig {
     @Test
     public void shouldCreateAndDeleteNewProject() {
         //Given
-        loginTest();
+        validLogin();
 
         // delete all projects with prefix if such exist
         searchProject(namePrefix);

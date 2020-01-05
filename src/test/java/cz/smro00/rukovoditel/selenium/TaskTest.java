@@ -5,12 +5,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 public class TaskTest extends TestConfig {
@@ -24,7 +19,7 @@ public class TaskTest extends TestConfig {
         String taskUuid = UUID.randomUUID().toString();
         String taskName = namePrefix+"-task-"+taskUuid;
 
-        loginTest();
+        validLogin();
 
         createProject(projectName);
 
@@ -70,7 +65,7 @@ public class TaskTest extends TestConfig {
 
         String taskPrefix = namePrefix+"-task-";
 
-        loginTest();
+        validLogin();
 
         createProject(projectName);
 

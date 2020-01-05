@@ -34,6 +34,8 @@ public class TestConfig {
 
         if (runOnTravis) {
             cho.addArguments("headless");
+            System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver");
+
         } else {
             if (windows) {
                 System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
@@ -67,19 +69,9 @@ public class TestConfig {
         loginButton.click();
     }
 
-    public void loginTest() {
+    public void validLogin() {
         //Given + When (user logs in to page)
         rukovoditelLogin("rukovoditel", "vse456ru");
-
-        //Then (check user is logged)
-        Assert.assertEquals("Rukovoditel | Dashboard", driver.getTitle());
-        Assert.assertTrue(driver.getTitle().contentEquals("Rukovoditel | Dashboard"));
-
-        WebElement userDropdown = driver.findElement(By.cssSelector(".dropdown.user"));
-        Assert.assertTrue(userDropdown.isDisplayed());
-
-        WebElement usernameSpan = driver.findElement(By.cssSelector(".username"));
-        Assert.assertEquals("System Administrator", usernameSpan.getText());
     }
 
     public void deleteProject(String projectName) {

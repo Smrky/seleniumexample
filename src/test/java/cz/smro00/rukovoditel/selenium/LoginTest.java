@@ -9,7 +9,18 @@ public class LoginTest extends TestConfig {
 
     @Test
     public void shouldLoginValidCredentials() {
-        loginTest();
+        //Given + When
+        validLogin();
+
+        //Then (check user is logged)
+        Assert.assertEquals("Rukovoditel | Dashboard", driver.getTitle());
+        Assert.assertTrue(driver.getTitle().contentEquals("Rukovoditel | Dashboard"));
+
+        WebElement userDropdown = driver.findElement(By.cssSelector(".dropdown.user"));
+        Assert.assertTrue(userDropdown.isDisplayed());
+
+        WebElement usernameSpan = driver.findElement(By.cssSelector(".username"));
+        Assert.assertEquals("System Administrator", usernameSpan.getText());
     }
 
     @Test
