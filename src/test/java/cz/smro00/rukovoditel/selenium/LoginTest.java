@@ -39,7 +39,7 @@ public class LoginTest extends TestConfig {
     @Test
     public void shouldLogoffLoggedUser() {
         //Given
-        shouldLoginValidCredentials();
+        validLogin();
 
         //When
         WebElement dropdownToggleLink = driver.findElement(By.cssSelector(".dropdown.user .dropdown-toggle"));

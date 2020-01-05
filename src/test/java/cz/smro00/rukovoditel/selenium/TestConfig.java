@@ -34,8 +34,7 @@ public class TestConfig {
 
         if (runOnTravis) {
             cho.addArguments("headless");
-            System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver");
-
+            cho.addArguments("window-size=1920,1080");
         } else {
             if (windows) {
                 System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
@@ -80,8 +79,6 @@ public class TestConfig {
         WebElement deleteProjectIcon = driver.findElement(By.cssSelector(".table .fa-trash-o"));
         deleteProjectIcon.click();
 
-        //wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".modal-body")));
-
         WebElement confirmDeleteDiv = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#uniform-delete_confirm")));
         confirmDeleteDiv.click();
         WebElement submitDeleteProjectButton = driver.findElement(By.cssSelector(".btn-primary-modal-action"));
@@ -116,6 +113,7 @@ public class TestConfig {
         WebElement defaultFilterLink = driver.findElement(By.cssSelector(".portlet-title .caption .btn-group:nth-child(1) ul li:nth-child(1) a"));
         defaultFilterLink.click();
 
+        WebElement searchTable = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".table")));
 
         WebElement projectSearchInput = driver.findElement(By.cssSelector("#entity_items_listing66_21_search_keywords"));
         projectSearchInput.clear();
@@ -124,8 +122,6 @@ public class TestConfig {
         WebElement projectSearchIcon = driver.findElement(By.cssSelector(".fa-search"));
         projectSearchIcon.click();
 
-
-        WebElement searchTable = driver.findElement(By.cssSelector(".table"));
         wait.until(ExpectedConditions.stalenessOf(searchTable));
     }
 
